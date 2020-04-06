@@ -1,0 +1,4 @@
+source 'http://rubygems.org'
+
+# Specify dependencies in coinqvest_merchant_sdk.gemspec
+gemspec
