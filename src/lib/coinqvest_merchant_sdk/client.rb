@@ -48,7 +48,7 @@ module CoinqvestMerchantSDK
     def get(endpoint, params = {})
 
       path = build_connect_url(endpoint) + '?' +  URI.encode_www_form(params)
-      headers = build_auth_headers(endpoint, 'GET', params)
+      headers = build_headers(endpoint, 'GET', params)
 
       log "GET " + path
       log headers.to_s
@@ -73,7 +73,7 @@ module CoinqvestMerchantSDK
     def post(endpoint, params = {})
 
       path = build_connect_url(endpoint)
-      headers = build_auth_headers(endpoint, 'POST', params)
+      headers = build_headers(endpoint, 'POST', params)
 
       log "POST " + path + " " + params.to_s
       log headers.to_s
@@ -98,7 +98,7 @@ module CoinqvestMerchantSDK
     def put(endpoint, params = {})
 
       path = build_connect_url(endpoint)
-      headers = build_auth_headers(endpoint, 'PUT', params)
+      headers = build_headers(endpoint, 'PUT', params)
 
       log "PUT " + path + " " + params.to_s
       log headers.to_s
@@ -123,7 +123,7 @@ module CoinqvestMerchantSDK
     def delete(endpoint, params = {})
 
       path = build_connect_url(endpoint)
-      headers = build_auth_headers(endpoint, 'DELETE', params)
+      headers = build_headers(endpoint, 'DELETE', params)
 
       log "DELETE " + path + " " + params.to_s
       log headers.to_s
@@ -149,7 +149,7 @@ module CoinqvestMerchantSDK
 
     # private class to generate authentication headers
     private
-    def build_auth_headers(endpoint, method, params)
+    def build_headers(endpoint, method, params)
 
       timestamp = Time.now.to_i
       body = NIL
@@ -161,7 +161,8 @@ module CoinqvestMerchantSDK
       {
           :"X-Digest-Key" => @key,
           :"X-Digest-Signature" => OpenSSL::HMAC.hexdigest('sha256', @secret, data),
-          :"X-Digest-Timestamp" => timestamp
+          :"X-Digest-Timestamp" => timestamp,
+          :"User-Agent" => @client_name + " " + @client_version
       }
 
     end
