@@ -18,6 +18,19 @@ Installation with gem
 ---------------------
 `gem install coinqvest_merchant_sdk`
 
+**Usage Client**
+```ruby
+require 'coinqvest_merchant_sdk/client'
+
+client = CoinqvestMerchantSDK::Client.new(
+    'YOUR-API-KEY',
+    'YOUR-API-SECRET',
+    '/var/log/coinqvest-ruby.log' # an optional log file location
+)
+```
+Get your API key and secret here: https://www.coinqvest.com/en/api-settings
+
+
 ## Examples
 
 **Create a Customer** (https://www.coinqvest.com/en/api-docs#post-customer)
@@ -180,7 +193,7 @@ Your feedback is appreciated! If you have specific problems or bugs with this SD
 Contributing
 ------------
 
-1. Fork it ( https://github.com/COINQVEST/php-merchant-sdk/fork )
+1. Fork it ( https://github.com/COINQVEST/ruby-merchant-sdk/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
