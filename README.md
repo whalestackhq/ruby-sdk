@@ -18,6 +18,19 @@ Installation with gem
 ---------------------
 `gem install coinqvest_merchant_sdk`
 
+**Usage Client**
+```ruby
+require 'coinqvest_merchant_sdk/client'
+
+client = CoinqvestMerchantSDK::Client.new(
+    'YOUR-API-KEY',
+    'YOUR-API-SECRET',
+    '/var/log/coinqvest-ruby.log' # an optional log file location
+)
+```
+Get your API key and secret here: https://www.coinqvest.com/en/api-settings
+
+
 ## Examples
 
 **Create a Customer** (https://www.coinqvest.com/en/api-docs#post-customer)
