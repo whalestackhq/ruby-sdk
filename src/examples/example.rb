@@ -92,9 +92,9 @@ if response.code != 200
   exit 1
 end
 
-# the customer was created
+# the checkout was created
 data = JSON.parse(response.body)
-# data now contains an object as specified in the success response here: https://www.coinqvest.com/en/api-docs#post-customer
+# data now contains an object as specified in the success response here: https://www.coinqvest.com/en/api-docs#post-checkout
 checkout_id = data["checkoutId"] # store this persistently in your database
 url = data["url"] # redirect your customer to this URL to complete the payment
 
