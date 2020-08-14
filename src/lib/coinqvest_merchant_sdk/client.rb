@@ -152,9 +152,9 @@ module CoinqvestMerchantSDK
     def build_headers(endpoint, method, params)
 
       timestamp = Time.now.to_i
-      body = NIL
+      body = nil
       if method != 'GET'
-        body = params.length > 0 ? params.to_json : NIL
+        body = params.length > 0 ? params.to_json : nil
       end
       data = endpoint + timestamp.to_s + method + body.to_s
 
@@ -171,7 +171,7 @@ module CoinqvestMerchantSDK
     private
     def log(text)
 
-      if @log_file == NIL
+      if @log_file == nil
         return
       end
 
