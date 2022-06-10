@@ -84,7 +84,7 @@ response = client.post('/checkout/hosted', {
             :percent => 0.0825 # 8.25% CA sales tax
         }]
     },
-    :settlementCurrency => 'EUR' # specifies in which currency you want to settle
+    :settlementAsset => 'USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN' # specifies the asset you want to be credited in when the checkout completes
 })
 print "Status Code: " + response.code.to_s + "\n"
 print "Response Body: " + response.body + "\n"
@@ -99,7 +99,7 @@ response = client.get('/checkout', {:id => checkout_id})
 if response.code == 200
   data = JSON.parse(response.body)
   state = data["checkout"]["state"]
-  if %w(COMPLETED DELAYED_COMPLETED RESOLVED).include? state
+  if state == 'COMPLETED'
     print "The payment has completed and your account was credited. You can now ship the goods."
   else
     # try again in 30 seconds or so...
