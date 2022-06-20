@@ -63,8 +63,8 @@ Upon visiting the URL, your customer is presented with a checkout page hosted on
 ```ruby
 response = client.post('/checkout/hosted', {
     :charge => {
-        :customerId => customer_id, # associates this charge with a customer
-        :billingCurrency => 'USD', # specifies the billing currency
+        :customerId => customer_id, # associates this charge with a customer as crated by POST /customer
+        :billingCurrency => 'USD', # a billing currency as given by GET /currencies
         :lineItems => [{ # a list of line items included in this charge
             :description => 'T-Shirt',
             :netAmount => 10, # denominated in the currency specified above
@@ -84,7 +84,7 @@ response = client.post('/checkout/hosted', {
             :percent => 0.0825 # 8.25% CA sales tax
         }]
     },
-    :settlementAsset => 'USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN' # specifies the asset you want to be credited in when the checkout completes
+    :settlementAsset => 'USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN' # your settlement asset as given by GET /assets (or ORIGIN to omit conversion)
 })
 print "Status Code: " + response.code.to_s + "\n"
 print "Response Body: " + response.body + "\n"
@@ -122,7 +122,7 @@ response = client.get('/wallets')
 response = client.post('/withdrawal', {
   :sourceAsset => 'USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN', #withdraw from your USDC wallet
   :sourceAmount => '100',
-  :targetNetwork => 'BITCOIN', # send to a Bitcoin address
+  :targetNetwork => 'BITCOIN', # a target network as given by GET /networks
   :targetAccount => {
     :address => 'bc1qj633nx575jm28smgcp3mx6n3gh0zg6ndr0ew23'
   }
@@ -134,7 +134,7 @@ response = client.post('/withdrawal', {
 response = client.post('/withdrawal', {
   :sourceAsset => 'USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN', #withdraw from your USDC wallet
   :sourceAmount => '100',
-  :targetNetwork => 'STELLAR', # send to a Stellar account
+  :targetNetwork => 'STELLAR', # a target network as given by GET /networks
   :targetAccount => {
     :account => 'GDONUHZKLSYLDOZWR2TDW25GFXOBWCCKTPK34DLUVSOMFHLGURX6FNU6',
     :memo => 'Exodus',
