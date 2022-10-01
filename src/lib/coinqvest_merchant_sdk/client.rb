@@ -16,7 +16,7 @@ module CoinqvestMerchantSDK
     # @param secret; as given by https://www.coinqvest.com/en/api-settings
     # @param log_file; optional log file path
     # @constructor
-    def initialize(key, secret, log_file = NIL)
+    def initialize(key, secret, log_file = nil)
 
       # @string The API Key as given by https://www.coinqvest.com/en/api-settings
       @key = key
@@ -36,8 +36,8 @@ module CoinqvestMerchantSDK
       # @string COINQVEST connect url
       @connect_url = CoinqvestMerchantSDK::CONNECT_URL
 
-      # @string|NIL Specifies the log file to which to write, if any.
-      @log_file = log_file ? log_file : NIL
+      # @string|nil Specifies the log file to which to write, if any.
+      @log_file = log_file ? log_file : nil
 
     end
 
