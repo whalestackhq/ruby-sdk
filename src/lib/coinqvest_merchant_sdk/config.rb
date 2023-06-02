@@ -1,6 +1,6 @@
 module CoinqvestMerchantSDK
 
-  CLIENT_VERSION = '0.0.7'
+  CLIENT_VERSION = '0.0.8'
 
   CLIENT_NAME = 'ruby_merchant_sdk'
 
