@@ -1,12 +1,12 @@
-# COINQVEST Merchant SDK (Ruby)
+# COINQVEST Payments API SDK (Ruby)
 
-Official COINQVEST Merchant API SDK for Ruby by www.coinqvest.com
+Official COINQVEST Payments API SDK for Ruby by www.coinqvest.com
+
+Accepting cryptocurrency payments using the COINQVEST API is fast, secure, and easy. After you've signed up and obtained your [API key](https://www.coinqvest.com/en/api-settings), all you need to do is create a checkout or blockchain deposit address on Bitcoin, Lightning, Litecoin, Stellar, or other supported networks to get paid. You can also use he API for fiat on- and off-ramping via SWIFT or SEPA.
 
 This SDK implements the REST API documented at https://www.coinqvest.com/en/api-docs
 
 For SDKs in different programming languages, see https://www.coinqvest.com/en/api-docs#sdks
-
-Read our Merchant API [development guide](https://www.coinqvest.com/en/blog/guide-mastering-cryptocurrency-checkouts-with-coinqvest-merchant-apis-321ac139ce15) and the examples below to help you get started.
 
 Requirements
 ------------
@@ -30,148 +30,91 @@ client = CoinqvestMerchantSDK::Client.new(
 ```
 Get your API key and secret here: https://www.coinqvest.com/en/api-settings
 
+Guides
+------
 
-## Examples
+* [Using the COINQVEST API](https://www.coinqvest.com/en/api-docs#getting-started)
+* [Building Checkouts](https://www.coinqvest.com/en/api-docs#building-checkouts)
+* [Authentication](https://www.coinqvest.com/en/api-docs#authentication) (handled by SDK)
+* [Brand Connect](https://www.coinqvest.com/en/api-docs#brand-connect) (white label checkouts on your own domain)
 
-**Create a Customer** (https://www.coinqvest.com/en/api-docs#post-customer)
+## Wallets and Deposits
 
-Creates a customer object, which can be associated with checkouts, payments, and invoices. Checkouts associated with a customer generate more transaction details, help with your accounting, and can automatically create invoices for your customer and yourself.
+Your COINQVEST account comes equipped with dedicated deposit addresses for Bitcoin, Lightning, Litecoin, select assets on the Stellar Network, SWIFT, and SEPA, and other supported networks. You can receive blockchain payments within seconds after registering. The [GET /wallets](https://www.coinqvest.com/en/api-docs#get-wallets) and [GET /deposit-address](https://www.coinqvest.com/en/api-docs#deposit-address) endpoints return your blockchain addresses to start receiving custom deposits.
 
-```ruby
-response = client.post('/customer', {:customer => {
-    :email => 'john@tester-1.com',
-    :firstname => 'John',
-    :lastname => 'Doe',
-    :company => 'ACME Inc.',
-    :adr1 => '810 Beach St',
-    :adr2 => 'Finance Department',
-    :zip => 'CA 94103',
-    :city => 'San Francisco',
-    :countrycode => 'US'
-}})
-print "Status Code: " + response.code.to_s + "\n"
-print "Response Body: " + response.body + "\n"
-```
-**Create a Hosted Checkout** (https://www.coinqvest.com/en/api-docs#post-checkout-hosted)
-
-Hosted checkouts are the simplest form of getting paid using the COINQVEST platform. 
-
-Using this endpoint, your server submits a set of parameters, such as the payment details including optional tax items, customer information, and settlement currency. Your server then receives a checkout URL in return, which is displayed back to your customer. 
-
-Upon visiting the URL, your customer is presented with a checkout page hosted on COINQVEST servers. This page displays all the information the customer needs to complete payment.
-
-```ruby
-response = client.post('/checkout/hosted', {
-    :charge => {
-        :customerId => customer_id, # associates this charge with a customer as crated by POST /customer
-        :billingCurrency => 'USD', # a billing currency as given by GET /currencies
-        :lineItems => [{ # a list of line items included in this charge
-            :description => 'T-Shirt',
-            :netAmount => 10, # denominated in the currency specified above
-            :quantity => 1
-        }],
-        :discountItems => [{ # an optional list of discounts
-            :description => 'Loyalty Discount',
-            :netAmount => 0.5
-        }],
-        :shippingCostItems => [{ # an optional list of shipping and handling costs
-            :description => 'Shipping and Handling',
-            :netAmount => 3.99,
-            :taxable => FALSE # sometimes shipping costs are taxable
-        }],
-        :taxItems => [{ # an optional list of taxes
-            :name => 'CA Sales Tax',
-            :percent => 0.0825 # 8.25% CA sales tax
-        }]
-    },
-    :settlementAsset => 'USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN' # your settlement asset as given by GET /assets (or ORIGIN to omit conversion)
-})
-print "Status Code: " + response.code.to_s + "\n"
-print "Response Body: " + response.body + "\n"
-```
-
-**Monitor Payment State** (https://www.coinqvest.com/en/api-docs#get-checkout)
-
-Once the payment is captured we notify you via email, [webhook](https://www.coinqvest.com/en/api-docs#webhook-concepts). You can also poll [GET /checkout](https://www.coinqvest.com/en/api-docs#get-checkout) for payment status updates:
-
-```ruby
-response = client.get('/checkout', {:id => checkout_id})
-if response.code == 200
-  data = JSON.parse(response.body)
-  state = data["checkout"]["state"]
-  if state == 'COMPLETED'
-    print "The payment has completed and your account was credited. You can now ship the goods."
-  else
-    # try again in 30 seconds or so...
-  end
-end
-```
-
-**Query your USD Wallet** (https://www.coinqvest.com/en/api-docs#get-wallet)
-```ruby
-response = client.get('/wallet', {:assetCode => 'USD'})
-```
-
-**Query all Wallets** (https://www.coinqvest.com/en/api-docs#get-wallets)
+**List Wallets and Deposit Addresses** (https://www.coinqvest.com/en/api-docs#get-wallets)
 ```ruby
 response = client.get('/wallets')
 ```
 
-**Withdraw USDC to your Bitcoin Account** (https://www.coinqvest.com/en/api-docs#post-withdrawal)
+## Checkouts
+
+COINQVEST checkouts provide fast and convenient ways for your customers to complete payment. We built a great user experience with hosted checkouts that can be fully branded. If you're not into payment pages, you can take full control over the entire checkout process using our backend checkout APIs. Click [here](https://www.coinqvest.com/en/api-docs#building-checkouts) to learn more about building checkouts.
+
+**Create a Hosted Checkout (Payment Link)** (https://www.coinqvest.com/en/api-docs#post-checkout-hosted)
 ```ruby
-response = client.post('/withdrawal', {
-  :sourceAsset => 'USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN', #withdraw from your USDC wallet
-  :sourceAmount => '100',
-  :targetNetwork => 'BITCOIN', # a target network as given by GET /networks
-  :targetAccount => {
-    :address => 'bc1qj633nx575jm28smgcp3mx6n3gh0zg6ndr0ew23'
-  }
+response = client.post('/checkout/hosted', {
+    :charge => {
+        :billingCurrency => 'EUR', # a billing currency as given by GET /currencies
+        :lineItems => [{ # a list of line items included in this charge
+            :description => 'PCI Graphics Card',
+            :netAmount => 169.99, # denominated in the currency specified above
+            :quantity => 1
+        }],
+        :discountItems => [] # an optional list of discounts
+        :shippingCostItems => [] # an optional list of shipping and handling costs
+        :taxItems => [] # an optional list of taxes
+    },
+    :settlementAsset => 'USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN' # your settlement asset as given by GET /assets (or ORIGIN to omit conversion)
 })
 ```
 
-**Withdraw USDC to your Stellar Account** (https://www.coinqvest.com/en/api-docs#post-withdrawal)
+## Swaps And Transfers
+
+Once funds arrive in your account, either via completed checkouts or custom deposits, you have instant access to them and the ability to swap them into other assets or transfer them to your bank account or other blockchain accounts (we recommend to always forward funds into self-custody on cold storage). The [POST /swap](https://www.coinqvest.com/en/api-docs#post-swap) and [POST /transfer](https://www.coinqvest.com/en/api-docs#post-transfer) endpoints will get you started on swaps and transfers.
+
+**Swap Bitcoin to USDC** (https://www.coinqvest.com/en/api-docs#post-swap)
 ```ruby
-response = client.post('/withdrawal', {
-  :sourceAsset => 'USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN', #withdraw from your USDC wallet
-  :sourceAmount => '100',
-  :targetNetwork => 'STELLAR', # a target network as given by GET /networks
-  :targetAccount => {
-    :account => 'GDONUHZKLSYLDOZWR2TDW25GFXOBWCCKTPK34DLUVSOMFHLGURX6FNU6',
-    :memo => 'Exodus',
-    :memoType => 'text'
-  }
+response = client.post('/swap', {
+    :sourceAsset => 'BTC:GCQVEST7KIWV3KOSNDDUJKEPZLBFWKM7DUS4TCLW2VNVPCBGTDRVTEIT',
+    :targetAsset => 'USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN',
+    :targetAmount => 100
 })
 ```
 
-**Update a Customer** (https://www.coinqvest.com/en/api-docs#put-customer)
+**Transfer USDC to your SEPA Bank** (https://www.coinqvest.com/en/api-docs#post-transfer)
 ```ruby
-response = client.put('/customer', {:customer => {
-    :id => customer_id,
-    :email => 'john@tester-2.com'
-}})
+response = client.post('/transfer', {
+    :network => 'SEPA',
+    :asset => 'USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN',
+    :amount => 100,
+    :targetAccount => 'A unique SEPA account label as previously specified in POST /target-account'
+})
 ```
 
-**Delete a Customer** (https://www.coinqvest.com/en/api-docs#delete-customer)
-```ruby
-response = client.delete('/customer', {:id => customer_id})
-```
+## Supported Assets, Currencies, and Networks
 
-**List your 250 newest customers** (https://www.coinqvest.com/en/api-docs#get-customers)
-```ruby
-response = client.get('/customers', {:limit => 250})
-```
-
-**List all available assets** (https://www.coinqvest.com/en/api-docs#get-assets)
-```ruby
-response = client.get('/assets')
-```
-
-**List all available networks** (https://www.coinqvest.com/en/api-docs#get-networks)
+**List all available Networks** (https://www.coinqvest.com/en/api-docs#get-networks)
 ```ruby
 response = client.get('/networks')
 ```
 
-Please inspect https://www.coinqvest.com/en/api-docs for detailed API documentation or email us at service@coinqvest.com if you have questions.
+**List all available Assets** (https://www.coinqvest.com/en/api-docs#get-assets)
+```ruby
+response = client.get('/assets')
+```
+
+**List all available Billing Currencies** (https://www.coinqvest.com/en/api-docs#get-currencies)
+```ruby
+response = client.get('/currencies')
+```
+
+## Financial Reports and Accounting
+
+We don't leave you hanging with an obscure and complicated blockchain payment trail to figure out by yourself. All transactions on COINQVEST are aggregated into the Financial Reports section of your account and can even be associated with counter-parties, such as customers and beneficiaries. We provide CSV reports, charts, and beautiful analytics for all your in-house accounting needs.
+
+Please inspect https://www.coinqvest.com/en/api-docs for detailed API documentation or email us at service [at] coinqvest.com if you have questions.
+
 
 Support and Feedback
 --------------------
