@@ -1,40 +1,40 @@
 require 'rest-client'
 require 'json'
 require 'time'
-require 'coinqvest_merchant_sdk/config'
+require 'whalestack_sdk/config'
 require 'uri'
 require 'openssl'
 
- # Ruby implementation of a REST client for the COINQVEST Merchant API
- # see https://www.coinqvest.com/en/api-docs
-module CoinqvestMerchantSDK
+ # Ruby implementation of a REST client for the Whalestack Payments API
+ # see https://www.whalestack.com/en/api-docs
+module WhalestackSDK
 
   class Client
 
-    # Merchant API client constructor, initialize this with the API key and secret as given by https://www.coinqvest.com/en/api-settings
-    # @param key; as given by https://www.coinqvest.com/en/api-settings
-    # @param secret; as given by https://www.coinqvest.com/en/api-settings
+    # Payments API client constructor, initialize this with the API key and secret as given by https://www.whalestack.com/en/api-settings
+    # @param key; as given by https://www.whalestack.com/en/api-settings
+    # @param secret; as given by https://www.whalestack.com/en/api-settings
     # @param log_file; optional log file path
     # @constructor
     def initialize(key, secret, log_file = nil)
 
-      # @string The API Key as given by https://www.coinqvest.com/en/api-settings
+      # @string The API Key as given by https://www.whalestack.com/en/api-settings
       @key = key
 
-      # @string The API Secret as given by https://www.coinqvest.com/en/api-settings
+      # @string The API Secret as given by https://www.whalestack.com/en/api-settings
       @secret = secret
 
       # @string The API version to which we connect (leave it as is)
-      @api_version = CoinqvestMerchantSDK::API_VERSION
+      @api_version = WhalestackSDK::API_VERSION
 
       # @string Used in the HTTP user agent (leave it as is)
-      @client_name = CoinqvestMerchantSDK::CLIENT_NAME
+      @client_name = WhalestackSDK::CLIENT_NAME
 
       # @string The current version of this SDK, used in the HTTP user agent (leave it as is)
-      @client_version = CoinqvestMerchantSDK::CLIENT_VERSION
+      @client_version = WhalestackSDK::CLIENT_VERSION
 
-      # @string COINQVEST connect url
-      @connect_url = CoinqvestMerchantSDK::CONNECT_URL
+      # @string Whalestack connect url
+      @connect_url = WhalestackSDK::CONNECT_URL
 
       # @string|nil Specifies the log file to which to write, if any.
       @log_file = log_file ? log_file : nil
@@ -141,7 +141,7 @@ module CoinqvestMerchantSDK
 
     end
 
-    # private class to generate connect url on COINQVEST servers
+    # private class to generate connect url on Whalestack servers
     private
     def build_connect_url(endpoint)
       @connect_url + @api_version + endpoint
@@ -175,8 +175,7 @@ module CoinqvestMerchantSDK
         return
       end
 
-      File.open(@log_file, 'a') { |f| f.write(Time.now.utc.rfc822 + " [CoinqvestMerchantSDK] " + text + "\n") }
-      # print Time.now.utc.rfc822 + " [CoinqvestMerchantSDK] " + text + "\n"
+      File.open(@log_file, 'a') { |f| f.write(Time.now.utc.rfc822 + " [WhalestackSDK] " + text + "\n") }
 
     end
 

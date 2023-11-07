@@ -1,3 +1,3 @@
-module CoinqvestMerchantSDK
+module WhalestackSDK
   # Your code goes here...
 end

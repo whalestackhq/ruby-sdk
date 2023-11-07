@@ -1,15 +1,15 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path('../lib', __FILE__)
-require 'coinqvest_merchant_sdk/config'
+require 'whalestack_sdk/config'
 
 Gem::Specification.new do |s|
-  s.name        = 'coinqvest_merchant_sdk'
-  s.version     = CoinqvestMerchantSDK::CLIENT_VERSION
+  s.name        = 'whalestack_sdk'
+  s.version     = WhalestackSDK::CLIENT_VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ['COINQVEST Ltd.']
-  s.email       = ['service@coinqvest.com']
-  s.homepage    = 'https://www.coinqvest.com'
-  s.summary     = %q{Ruby Merchant SDK for COINQVEST. Programmatically accept and settle payments in digital currencies.}
+  s.authors     = ['Whalestack LLC']
+  s.email       = ['service@whalestack.com']
+  s.homepage    = 'https://www.whalestack.com'
+  s.summary     = %q{Whalestack SDK. Programmatically accept and settle payments in digital currencies.}
   s.licenses    = ['Apache-2.0']
   s.required_ruby_version = '>= 2.0.0'
 
